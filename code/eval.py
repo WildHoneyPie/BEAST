@@ -19,25 +19,21 @@ warnings.filterwarnings('ignore')
 FPS = 44100 / 1024
 NUM_FOLDS = 1
 #model
-ATTN_LEN=5
-
-NORM_FIRST=True
 NTOKEN=2
 DMODEL=256
 NHEAD=8
 DHID=1024
 NLAYER=9
 DROPOUT=.1
-LEFT=288
+LEFT=256
 CENTER=16
 RIGHT=16
 DEVICE='cuda:0'
-#directories
-DATASET_PATH = '/media/ccbs1012/A4A079C8A079A20A/audio_128/spectrogram_data.npz'
-ANNOTATION_PATH = '/media/ccbs1012/A4A079C8A079A20A/audio_128/full_beat_annotation.npz'
-DATA_TO_LOAD = ['ballroom','hainsworth','smc','carnetic','beatles']
 
-TEST_ONLY = []
+#directories
+DATASET_PATH = '../data/gtzan_data.npz'
+ANNOTATION_PATH = '../data/full_beat_annotation.npz'
+
 DEMO_SAVE_ROOT = '../save/inference'
 if not os.path.exists(DEMO_SAVE_ROOT):
     os.makedirs(DEMO_SAVE_ROOT)
@@ -132,7 +128,7 @@ def inference_gtzan_dbn():
     print(f'inferencing on {dataset_key} ...')
 
     beat_tracker = madmom.features.beats.DBNBeatTrackingProcessor(min_bpm=55.0, max_bpm=215.0, fps=FPS, transition_lambda=2, observation_lambda=8,online=True)
-    downbeat_tracker = madmom.features.downbeats.DBNDownBeatTrackingProcessor(beats_per_bar=[3, 4], min_bpm=55.0, max_bpm=215.0, fps=FPS, transition_lambda=t, observation_lambda=o,online=True)
+    downbeat_tracker = madmom.features.downbeats.DBNDownBeatTrackingProcessor(beats_per_bar=[3, 4], min_bpm=55.0, max_bpm=215.0, fps=FPS, transition_lambda=80, observation_lambda=15,online=True)
 
     beat_DBN_meter = AverageMeter()
     Downbeat_DBN_meter = AverageMeter()
