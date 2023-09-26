@@ -281,27 +281,27 @@ class ContextualBlockTransformerEncoder(AbsEncoder):
             addin[:, 0, :] = xs_pad.narrow(1, cur_hop, self.block_size).mean(1)  #xs_pad(batch,time,d_model)
         else:  # initialize with max value
             addin[:, 0, :] = xs_pad.narrow(1, cur_hop, self.block_size).max(1)
-        cur_hop += self.hop_size
+        cur_hop += self.center
         # following steps
         while cur_hop + self.block_size < total_frame_num:
             if self.init_average:  # initialize with average value
-                addin[:, cur_hop // self.hop_size, :] = xs_pad.narrow(
+                addin[:, cur_hop // self.center, :] = xs_pad.narrow(
                     1, cur_hop, self.block_size
                 ).mean(1)
             else:  # initialize with max value
-                addin[:, cur_hop // self.hop_size, :] = xs_pad.narrow(
+                addin[:, cur_hop // self.center, :] = xs_pad.narrow(
                     1, cur_hop, self.block_size
                 ).max(1)
-            cur_hop += self.hop_size
+            cur_hop += self.center
 
         # last step
-        if cur_hop < total_frame_num and cur_hop // self.hop_size < block_num:
+        if cur_hop < total_frame_num and cur_hop // self.center < block_num:
             if self.init_average:  # initialize with average value
-                addin[:, cur_hop // self.hop_size, :] = xs_pad.narrow(
+                addin[:, cur_hop // self.center, :] = xs_pad.narrow(
                     1, cur_hop, total_frame_num - cur_hop
                 ).mean(1)
             else:  # initialize with max value
-                addin[:, cur_hop // self.hop_size, :] = xs_pad.narrow(
+                addin[:, cur_hop // self.center, :] = xs_pad.narrow(
                     1, cur_hop, total_frame_num - cur_hop
                 ).max(1)
 
@@ -329,14 +329,14 @@ class ContextualBlockTransformerEncoder(AbsEncoder):
         xs_chunk[:, block_idx, 1 : self.block_size + 1] = xs_pad.narrow(
             -2, left_idx, self.block_size
         )
-        left_idx += self.hop_size
+        left_idx += self.center
         block_idx += 1
         # following steps
         while left_idx + self.block_size < total_frame_num and block_idx < block_num:
             xs_chunk[:, block_idx, 1 : self.block_size + 1] = xs_pad.narrow(
                 -2, left_idx, self.block_size
             )
-            left_idx += self.hop_size
+            left_idx += self.center
             block_idx += 1
         # last steps
         last_size = total_frame_num - left_idx
@@ -359,25 +359,25 @@ class ContextualBlockTransformerEncoder(AbsEncoder):
 
         # copy output
         # first step
-        offset = self.block_size - self.look_ahead - self.hop_size + 1
+        offset = self.block_size - self.look_ahead - self.center + 1
         left_idx = 0
         block_idx = 0
         cur_hop = self.block_size - self.look_ahead
         ys_pad[:, left_idx:cur_hop] = ys_chunk[:, block_idx, 1 : cur_hop + 1]
         tempo_pad[:, left_idx:cur_hop] = tempo[:, block_idx, 1 : cur_hop + 1]
-        left_idx += self.hop_size
+        left_idx += self.center
         block_idx += 1
 
         # following steps
         while left_idx + self.block_size < total_frame_num and block_idx < block_num:
-            ys_pad[:, cur_hop : cur_hop + self.hop_size] = ys_chunk[
-                :, block_idx, offset : offset + self.hop_size
+            ys_pad[:, cur_hop : cur_hop + self.center] = ys_chunk[
+                :, block_idx, offset : offset + self.center
             ]
-            tempo_pad[:, cur_hop : cur_hop + self.hop_size] = tempo[
-                :, block_idx, offset : offset + self.hop_size
+            tempo_pad[:, cur_hop : cur_hop + self.center] = tempo[
+                :, block_idx, offset : offset + self.center
             ]
-            cur_hop += self.hop_size
-            left_idx += self.hop_size
+            cur_hop += self.center
+            left_idx += self.center
             block_idx += 1
 
         ys_pad[:, cur_hop:total_frame_num] = ys_chunk[
