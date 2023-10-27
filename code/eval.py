@@ -32,7 +32,7 @@ DEVICE='cuda:0'
 
 #directories
 DATASET_PATH = '../data/gtzan_data.npz'
-ANNOTATION_PATH = '../data/full_beat_annotation.npz'
+ANNOTATION_PATH = '../data/gtzann_beat_annotation.npz'
 
 DEMO_SAVE_ROOT = '../save/inference'
 if not os.path.exists(DEMO_SAVE_ROOT):
@@ -40,7 +40,7 @@ if not os.path.exists(DEMO_SAVE_ROOT):
 
 
 
-PARAM_PATH = {0:"../save/train_log/00_test/Fold_0/model/trf_param_020.pt"}
+PARAM_PATH = {0:"../data/BEAST_param.pt"}
 
 
 def infer_gtzan_activation():
@@ -171,7 +171,7 @@ def inference_gtzan_dbn():
         print('\t', key, beat_DBN_meter.avg[key])
     print('DBN downbeat detection')
     for key in Downbeat_DBN_meter.avg.keys():
-        print('\t', key, beat_DBN_meter.avg[key])
+        print('\t', key, Downbeat_DBN_meter.avg[key])
 
 
 
