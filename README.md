@@ -16,5 +16,5 @@ Run `./code/eval.py`.
 - Chih-Cheng Chang (ccchang12@iis.sinica.edu.tw)
 
 ## Acknowlegement
-1. We borrowed a lot of code from [ESPnet](https://github.com/espnet/espnet) for contextual block processing transformer based modeling.
-2. We borrowed a lot of code from [Beat-Transformer](https://github.com/zhaojw1998/Beat-Transformer) for beat tracking.
+1. We borrowed the code from [ESPnet](https://github.com/espnet/espnet) for contextual block processing transformer based modeling.
+2. We borrowed the code from [Beat-Transformer](https://github.com/zhaojw1998/Beat-Transformer) for beat tracking.
