@@ -32,7 +32,7 @@ DEVICE='cuda:0'
 
 #directories
 DATASET_PATH = '../data/gtzan_data.npz'
-ANNOTATION_PATH = '../data/gtzann_beat_annotation.npz'
+ANNOTATION_PATH = '../data/gtzan_beat_annotation.npz'
 
 DEMO_SAVE_ROOT = '../save/inference'
 if not os.path.exists(DEMO_SAVE_ROOT):
