@@ -1,6 +1,10 @@
 # BEAST
 An online beat tracking system based on streaming Transformer.
 
+[![arXiv](https://img.shields.io/badge/arXiv-2312.17156-b31b1b.svg)](https://arxiv.org/abs/2312.17156)
+
+The source code of the paper [BEAST: Online Joint Beat and Downbeat Tracking Based on Streaming Transformer](https://arxiv.org/abs/2312.17156), accepted by ICASSP 2024.
+
 More information to be updated.
 
 ## Usage
