@@ -256,7 +256,7 @@ class ContextualBlockTransformerEncoder(AbsEncoder):
         # apply usual encoder for short sequence
         if self.block_size == 0 or total_frame_num <= self.block_size:
             xs_pad, masks, _, _, _, _, _ = self.encoders(
-                xs_pad, masks, False, None, None
+                xs_pad, masks, None, xs_pad, None
             )
             if self.normalize_before:
                 xs_pad = self.after_norm(xs_pad)
