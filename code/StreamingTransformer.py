@@ -4,7 +4,7 @@ from Streaming_encoder_layer import ContextualBlockTransformerEncoder
 
 
 class TransformerModel(nn.Module):
-    def __init__(self, ntoken=2, dmodel=256, nhead=2, d_hid=2048, nlayers=9, norm_first=True, dropout=.1, left_size=288, center_size=16, right_size=16):
+    def __init__(self, ntoken=2, dmodel=256, nhead=2, d_hid=2048, nlayers=9, norm_first=True, dropout=.1, left_size=256, center_size=16, right_size=16):
         super(TransformerModel, self).__init__()
         self.nhead = nhead
         self.nlayers = nlayers
@@ -15,7 +15,7 @@ class TransformerModel(nn.Module):
 
         # self.pos_enc = StreamPositionalEncoding(dmodel, dropout)
 
-        self.conv1 = nn.Conv2d(in_channels=1, out_channels=32, kernel_size=(5, 3), stride=1, padding=(2, 0))#126
+        self.conv1 = nn.Conv2d(in_channels=1, out_channels=32, kernel_size=(3, 3), stride=1, padding=(2, 0))#126
         #self.conv1 = nn.Conv2d(in_channels=1, out_channels=32, kernel_size=(3, 3), stride=1, padding=(1, 0))#79
         self.maxpool1 = nn.MaxPool2d(kernel_size=(1, 3), stride=(1, 3))#26
         self.dropout1 = nn.Dropout(p=dropout)
@@ -25,7 +25,7 @@ class TransformerModel(nn.Module):
         self.maxpool2 = nn.MaxPool2d(kernel_size=(1, 3), stride=(1, 3))#5
         self.dropout2 = nn.Dropout(p=dropout)
         
-        self.conv3 = nn.Conv2d(in_channels=64, out_channels=dmodel, kernel_size=(3, 6), stride=1, padding=(1, 0))#5
+        self.conv3 = nn.Conv2d(in_channels=64, out_channels=dmodel, kernel_size=(2, 6), stride=1, padding=(1, 0))#5
         #self.conv3 = nn.Conv2d(in_channels=64, out_channels=dmodel, kernel_size=(3, 3), stride=1, padding=(1, 0))#3
         self.maxpool3 = nn.MaxPool2d(kernel_size=(1, 3), stride=(1, 3))#1
         self.dropout3 = nn.Dropout(p=dropout)
@@ -50,6 +50,7 @@ class TransformerModel(nn.Module):
         #x: (batch, time, dmodel), FloatTensor
         x = x.unsqueeze(1)  #(batch, channel, time, dmodel)
         x = self.conv1(x)
+        x = x[:,:,:-2,:]
         x = self.maxpool1(x)
         x = torch.relu(x)
         x = self.dropout1(x)
@@ -60,6 +61,7 @@ class TransformerModel(nn.Module):
         x = self.dropout2(x)
 
         x = self.conv3(x)
+        x = x[:,:,:-1,:]
         x = self.maxpool3(x)
         x = torch.relu(x)
         x = self.dropout3(x)    #(batch, channel, time, 1)
@@ -76,5 +78,4 @@ class TransformerModel(nn.Module):
         t = t.mean(dim=1) #(batch, dmodel)
         t = self.out_linear_t(t)
         return x, t
-
 
