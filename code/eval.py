@@ -127,7 +127,7 @@ def inference_gtzan_dbn():
     dataset_key ='gtzan'
     print(f'inferencing on {dataset_key} ...')
 
-    beat_tracker = madmom.features.beats.DBNBeatTrackingProcessor(min_bpm=55.0, max_bpm=215.0, fps=FPS, transition_lambda=2, observation_lambda=8,online=True)
+    beat_tracker = madmom.features.beats.DBNBeatTrackingProcessor(min_bpm=55.0, max_bpm=215.0, fps=FPS, transition_lambda=1, observation_lambda=11,online=True)
     downbeat_tracker = madmom.features.downbeats.DBNDownBeatTrackingProcessor(beats_per_bar=[3, 4], min_bpm=55.0, max_bpm=215.0, fps=FPS, transition_lambda=80, observation_lambda=15,online=True)
 
     beat_DBN_meter = AverageMeter()
